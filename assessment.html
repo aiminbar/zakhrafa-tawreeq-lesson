@@ -1,101 +1,11 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>التقويم التجميعي</title><style>
-:root{--ink:#073f3b;--green:#0b6b58;--gold:#c89a43;--cream:#fffaf0;--soft:#f5ead5;--ok:#167d58;--bad:#b5544d}
-*{box-sizing:border-box} body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f8f3e7;color:var(--ink);overflow-x:hidden}
-button{font:inherit}.app{min-height:100vh}.screen{display:none;min-height:100vh}.screen.active{display:block}
-#home{background:#efe6d3;position:relative}.home-img{display:block;width:100%;height:100vh;object-fit:contain}
-.hotspot{position:absolute;background:transparent;border:0;cursor:pointer}
-.home-tools{position:fixed;left:18px;bottom:18px;z-index:40}
-.fab{border:2px solid var(--gold);background:#fffaf0;color:var(--ink);border-radius:999px;padding:11px 16px;font-weight:700;box-shadow:0 5px 18px #0002;cursor:pointer}
-.lesson{padding-bottom:70px}.header{width:100%;max-height:245px;object-fit:cover;display:block;border-bottom:3px solid var(--gold)}
-.topbar{position:sticky;top:0;z-index:25;display:flex;gap:10px;padding:9px 14px;background:#fffdf8eF;backdrop-filter:blur(8px);border-bottom:1px solid #d9c28f}
-.topbar .spacer{flex:1}.content{width:min(1100px,94%);margin:22px auto}
-.card{background:#fffdf8;border:1px solid #dfc98e;border-radius:24px;padding:22px;margin:16px 0;box-shadow:0 7px 24px #5b482012}
-h1,h2,h3{margin-top:0}.lead{font-size:1.18rem;line-height:1.9}.center{text-align:center}
-.btn{border:0;border-radius:16px;padding:12px 18px;background:var(--green);color:white;font-weight:700;cursor:pointer;margin:5px}
-.btn.alt{background:#b48338}.btn.light{background:#edf6ef;color:var(--ink);border:1px solid #9ebea8}.btn:disabled{opacity:.5}
-.options{display:grid;gap:10px}.option{background:#fff;border:2px solid #d8c69a;border-radius:16px;padding:13px;cursor:pointer}.option.good{border-color:var(--ok);background:#eaf8ef}.option.bad{border-color:var(--bad);background:#fff0ee}
-.feedback{min-height:34px;font-weight:700;margin-top:12px}.svgbox{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;align-items:center}
-.tile{width:180px;min-height:150px;border:2px solid #d7bd77;border-radius:20px;background:#fff;padding:10px;display:grid;place-items:center;cursor:pointer}
-.flower,.leaf,.unit,.vine{width:130px;height:120px}.stage{opacity:.35;transform:scale(.94);transition:.35s}.stage.on{opacity:1;transform:scale(1)}
-.palette{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.swatch{width:36px;height:36px;border-radius:50%;border:3px solid white;outline:1px solid #aaa;cursor:pointer}
-.stars{font-size:1.7rem;letter-spacing:4px;text-align:center}.progress{height:12px;background:#eee;border-radius:9px;overflow:hidden}.progress>i{display:block;height:100%;width:0;background:var(--green);transition:.3s}
-.workspace{min-height:360px;border:2px dashed #bda15d;border-radius:22px;background:#fff;position:relative;overflow:hidden}.piece{position:absolute;font-size:56px;cursor:move;user-select:none;touch-action:none}
-.library{display:flex;gap:10px;flex-wrap:wrap}.lib{font-size:42px;background:#fff;border:1px solid #d9c28f;border-radius:14px;padding:8px;cursor:pointer}
-.lensArea{height:330px;border-radius:22px;background:linear-gradient(135deg,#fff,#edf4e7);position:relative;overflow:hidden}.hiddenDot{position:absolute;width:58px;height:58px;border-radius:50%;background:#0b6b5820;border:2px dashed #0b6b58;display:grid;place-items:center;cursor:pointer}
-.badge{display:inline-block;background:#e7f3e9;border:1px solid #91b99b;padding:8px 12px;border-radius:999px;margin:4px}
-.teacher-panel{position:fixed;left:18px;bottom:72px;z-index:50;background:#fffdf8;border:2px solid var(--gold);border-radius:18px;padding:10px;box-shadow:0 8px 28px #0003;display:none}
-.teacher-panel.open{display:block}.teacher-panel button{margin:3px}.draw-canvas{position:fixed;inset:0;z-index:45;pointer-events:none}.draw-canvas.on{pointer-events:auto}
-.quizQ{display:none}.quizQ.active{display:block}
-@media(max-width:700px){.header{max-height:170px}.content{width:96%}.tile{width:145px}.home-img{height:auto;min-height:100vh;object-fit:cover}}
-</style></head><body>
-<canvas id="drawCanvas" class="draw-canvas"></canvas>
-<div id="teacherPanel" class="teacher-panel">
-<b>✏️ أدوات المعلمة</b><br>
-<button class="btn light" onclick="setTool('pen')">قلم</button>
-<button class="btn light" onclick="setTool('marker')">محدد</button>
-<button class="btn light" onclick="setTool('eraser')">ممحاة</button><br>
-<button class="btn light" onclick="setColor('#073f3b')">●</button>
-<button class="btn light" onclick="setColor('#c89a43')">●</button>
-<button class="btn light" onclick="setColor('#b5544d')">●</button>
-<button class="btn light" onclick="undoDraw()">↩ تراجع</button>
-<button class="btn light" onclick="clearDraw()">مسح الكل</button>
-<button class="btn alt" onclick="toggleTeacher()">إغلاق</button>
-</div>
-<section class="screen lesson active"><img class="header" src="11-header.png" alt="التقويم التجميعي">
-<div class="topbar"><a class="fab" href="index.html" style="text-decoration:none">🏠 الرئيسية</a><button class="fab" onclick="toggleTeacher()">✏️ أدوات المعلمة</button><span class="spacer"></span><b>التقويم التجميعي</b></div>
-<main class="content"><div class="card"><h2 class="center">⭐ التَّقْوِيمُ التَّجْمِيعِيُّ</h2><div class="stars" id="quizStars">☆ ☆ ☆ ☆ ☆ ☆</div><div class="progress"><i id="quizProgress"></i></div>
-<div class="quizQ active"><h3>① مَا الْمَقْصُودُ بِالتَّجْرِيدِ؟</h3><div class="options" data-answer="0" data-quiz="1"><button class="option">الِابْتِعَادُ عَنِ النَّقْلِ الْحَرْفِيِّ وَرَفْضُ الْمُحَاكَاةِ مِنْ عَنَاصِرِ الطَّبِيعَةِ.</button><button class="option">نقل العنصر كما هو تمامًا.</button><button class="option">استخدام الأشكال الهندسية فقط.</button></div><div class="feedback"></div></div>
-<div class="quizQ"><h3>② أَيُّ شَكْلٍ يُمَثِّلُ وَحْدَةً زُخْرُفِيَّةً نَبَاتِيَّةً مُجَرَّدَةً؟</h3><div class="options" data-answer="1" data-quiz="1"><button class="option">🌸</button><button class="option">❧🌿❧</button><button class="option">⭐</button></div><div class="feedback"></div></div>
-<div class="quizQ"><h3>③ رَتِّبِي: عُنْصُرٌ نَبَاتِيٌّ ← ؟</h3><div class="options" data-answer="0" data-quiz="1"><button class="option">تَبْسِيطٌ ← تَحْوِيرٌ ← وَحْدَةٌ زُخْرُفِيَّةٌ</button><button class="option">تَكْرَارٌ ← صُورَةٌ وَاقِعِيَّةٌ</button></div><div class="feedback"></div></div>
-<div class="quizQ"><h3>④ أَيُّ التَّكْوِينَاتِ يُمَثِّلُ التَّوْرِيقَ؟</h3><div class="options" data-answer="1" data-quiz="1"><button class="option">◇◆◇</button><button class="option">🌿❧🌿❧</button><button class="option">🌸</button></div><div class="feedback"></div></div>
-<div class="quizQ"><h3>⑤ أُكْمِلُ النَّمَطَ: 🌿 ◇ 🌿 ◇ 🌿 ❓</h3><div class="options" data-answer="0" data-quiz="1"><button class="option">◇</button><button class="option">🌸</button><button class="option">⭐</button></div><div class="feedback"></div></div>
-<div class="quizQ"><h3>⑥ أَيُّ تَكْوِينٍ اسْتَخْدَمَ الْوَحْدَةَ بِالتَّكْرَارِ؟</h3><div class="options" data-answer="2" data-quiz="1"><button class="option">❧</button><button class="option">🌸</button><button class="option">❧ ❧ ❧ ❧</button></div><div class="feedback"></div></div>
-<div id="quizDone" class="center" style="display:none"><h2>🏆 أَحْسَنْتِ يَا فَنَّانَةَ الزَّخْرَفَةِ!</h2><p class="lead">أَتْمَمْتِ رِحْلَتَكِ فِي تَجْرِيدِ الْوَحْدَةِ الزُّخْرُفِيَّةِ النَّبَاتِيَّةِ وَالتَّوْرِيقِ فِي الزَّخَارِفِ الْإِسْلَامِيَّةِ. 🌿✨</p><h2>نَتِيجَتُكِ: ٦ / ٦ ⭐</h2><button class="btn" onclick="resetQuiz()">🔄 أُعِيدُ التَّقْوِيمَ</button><button class="btn alt" onclick="showScreen('home')">🏠 أَعُودُ إِلَى الرَّئِيسِيَّةِ</button></div></div></main></section>
-<script>
-
-
-
-function showScreen(id){ if(id==='home'){location.href='index.html';return;} const n=Number(String(id).replace('s','')); const map={1: "rules.html", 2: "warmup.html", 3: "abstraction.html", 4: "compare.html", 5: "abstract-myself.html", 6: "game.html", 7: "tawreeq.html", 8: "discover-tawreeq.html", 9: "design.html", 10: "national.html", 11: "assessment.html"}; if(map[n]) location.href=map[n]; }
-function bindInteractions(){
- document.querySelectorAll('.next').forEach(b=>b.onclick=()=>showScreen('s'+b.dataset.next));
- document.querySelectorAll('.options').forEach(group=>group.querySelectorAll('.option').forEach((b,idx)=>b.onclick=()=>answerOption(group,b,idx)));
- document.querySelectorAll('#multi4 .option').forEach(b=>b.onclick=()=>{b.classList.toggle(b.dataset.good?'good':'bad');let good=[...document.querySelectorAll('#multi4 .option[data-good="1"]')].every(x=>x.classList.contains('good'));if(good) document.querySelector('#multi4+.feedback').textContent='رَائِعَةٌ! ✨ لَقَدِ اكْتَشَفْتِ مَا يَحْدُثُ عِنْدَ التَّجْرِيدِ.'});
- let sel=null;document.querySelectorAll('.match .tile:not(.target)').forEach(x=>x.onclick=()=>{sel=x;document.querySelectorAll('.match .tile').forEach(y=>y.style.outline='');x.style.outline='4px solid #c89a43'});
- document.querySelectorAll('.match .target').forEach(x=>x.onclick=()=>{if(!sel)return;if(x.dataset.pair===sel.dataset.pair){x.classList.add('good');sel.classList.add('good');sel=null}else{x.classList.add('bad');setTimeout(()=>x.classList.remove('bad'),500)}});
- document.querySelectorAll('#pick8 .tile').forEach(x=>x.onclick=()=>{x.classList.add(x.dataset.good?'good':'bad');let n=document.querySelectorAll('#pick8 .good').length;if(n>=2)x.parentElement.nextElementSibling.textContent='رَائِعَةٌ! ✨ أَصْبَحْتِ تُمَيِّزِينَ التَّوْرِيقَ.'});
- document.querySelectorAll('.hiddenDot').forEach(x=>x.onclick=()=>{if(x.dataset.done)return;x.dataset.done=1;x.textContent=x.dataset.name;x.style.width='180px';lensFound++;document.getElementById('lensCount').textContent=`اكْتَشَفْتِ: ${['٠','١','٢','٣'][lensFound]} / ٣ 🌿`});
-}
-let quizIndex=0, lensFound=0, gameDone=new Set();
-function answerOption(group,b,idx){
- let correct=Number(group.dataset.answer); let fb=group.nextElementSibling?.classList.contains('feedback')?group.nextElementSibling:null;
- group.querySelectorAll('.option').forEach(x=>x.classList.remove('bad'));
- if(idx===correct){b.classList.add('good'); if(fb)fb.textContent=group.dataset.quiz?'أَحْسَنْتِ! ⭐':'أَحْسَنْتِ! ✨'; if(group.dataset.star)completeGameStar(Number(group.dataset.star)); if(group.dataset.quiz)setTimeout(nextQuiz,500)}
- else{b.classList.add('bad');if(fb)fb.textContent='حَاوِلِي مَرَّةً أُخْرَى 🌱'}
-}
-function animateStages(btn){let s=btn.parentElement.querySelectorAll('.stage');s.forEach((x,i)=>setTimeout(()=>x.classList.add('on'),i*500))}
-function stepBuild5(){document.getElementById('strip5').textContent='🍃  →  ❧  →  ❧';}
-function repeat5(){document.getElementById('strip5').textContent='❧ ❧ ❧ ❧ ❧ ❧';}
-function colorStrip(c){document.getElementById('strip5').style.color=c}
-function completeGameStar(n){gameDone.add(n);document.getElementById('gameStars').textContent=[1,2,3].map(i=>gameDone.has(i)?'⭐':'☆').join(' ')}
-function growVine(){document.getElementById('vine7').textContent='🌿〰️❧🌱❧〰️🌿';document.getElementById('parts7').style.display='block'}
-let selected=null;
-function addPiece(t){let w=document.getElementById('workspace9'),p=document.createElement('div');p.className='piece';p.textContent=t;p.style.left=(20+Math.random()*70)+'%';p.style.top=(20+Math.random()*60)+'%';p.dataset.rot=0;p.dataset.scale=1;p.onclick=e=>{e.stopPropagation();selected=p;[...w.children].forEach(x=>x.style.outline='');p.style.outline='2px dashed #c89a43'};enableDrag(p,w);w.appendChild(p)}
-function enableDrag(el,w){let dragging=false,ox=0,oy=0;el.onpointerdown=e=>{dragging=true;el.setPointerCapture(e.pointerId);let r=el.getBoundingClientRect();ox=e.clientX-r.left;oy=e.clientY-r.top};el.onpointermove=e=>{if(!dragging)return;let r=w.getBoundingClientRect();el.style.left=Math.max(0,Math.min(r.width-60,e.clientX-r.left-ox))+'px';el.style.top=Math.max(0,Math.min(r.height-60,e.clientY-r.top-oy))+'px'};el.onpointerup=()=>dragging=false}
-function transformSelected(a){if(!selected)return;let r=Number(selected.dataset.rot),s=Number(selected.dataset.scale);if(a==='rot')r+=45;if(a==='big')s+=.15;if(a==='small')s=Math.max(.4,s-.15);if(a==='del'){selected.remove();selected=null;return}if(a==='copy'){addPiece(selected.textContent);return}selected.dataset.rot=r;selected.dataset.scale=s;selected.style.transform=`rotate(${r}deg) scale(${s})`}
-function magicRepeat(){['❧','❧','❧','❧','❧'].forEach((x,i)=>{addPiece(x);let p=document.getElementById('workspace9').lastElementChild;p.style.left=(15+i*16)+'%';p.style.top='45%'})}
-function finishArt(){document.getElementById('artFeedback').textContent='إِبْدَاعٌ جَمِيلٌ! 🎨✨ اسْتَخْدَمْتِ الْعَنَاصِرَ النَّبَاتِيَّةَ لِتَصْمِيمِ تَكْوِينٍ زُخْرُفِيٍّ خَاصٍّ بِكِ.'}
-function nationColor(c){let s=document.getElementById('nationStrip');s.style.background=c;s.style.padding='12px';s.style.borderRadius='14px';document.getElementById('nationMsg').textContent='جَمِيلٌ! 🇸🇦✨ جَمَعْتِ بَيْنَ مَا تَعَلَّمْتِهِ فِي الزَّخْرَفَةِ وَتَعْبِيرِكِ عَنْ وَطَنِكِ.'}
-function nextQuiz(){let qs=[...document.querySelectorAll('#s11 .quizQ')];qs[quizIndex].classList.remove('active');quizIndex++;document.getElementById('quizStars').textContent=Array.from({length:6},(_,i)=>i<quizIndex?'⭐':'☆').join(' ');document.getElementById('quizProgress').style.width=(quizIndex/6*100)+'%';if(quizIndex<6)qs[quizIndex].classList.add('active');else document.getElementById('quizDone').style.display='block'}
-function resetQuiz(){quizIndex=0;document.querySelectorAll('#s11 .quizQ').forEach((q,i)=>q.classList.toggle('active',i===0));document.querySelectorAll('#s11 .option').forEach(x=>x.classList.remove('good','bad'));document.querySelectorAll('#s11 .feedback').forEach(x=>x.textContent='');document.getElementById('quizDone').style.display='none';document.getElementById('quizStars').textContent='☆ ☆ ☆ ☆ ☆ ☆';document.getElementById('quizProgress').style.width='0'}
-const canvas=document.getElementById('drawCanvas'),ctx=canvas.getContext('2d');let drawOn=false,drawing=false,tool='pen',color='#073f3b',history=[];
-function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight}addEventListener('resize',resizeCanvas);resizeCanvas();
-function toggleTeacher(){document.getElementById('teacherPanel').classList.toggle('open');drawOn=!drawOn;canvas.classList.toggle('on',drawOn)}
-function setTool(t){tool=t}function setColor(c){color=c;tool='pen'}function snap(){history.push(canvas.toDataURL());if(history.length>20)history.shift()}
-canvas.onpointerdown=e=>{snap();drawing=true;ctx.beginPath();ctx.moveTo(e.clientX,e.clientY)}
-canvas.onpointermove=e=>{if(!drawing)return;ctx.lineCap='round';ctx.lineJoin='round';ctx.globalAlpha=tool==='marker'?.25:1;ctx.globalCompositeOperation=tool==='eraser'?'destination-out':'source-over';ctx.strokeStyle=color;ctx.lineWidth=tool==='marker'?22:tool==='eraser'?28:4;ctx.lineTo(e.clientX,e.clientY);ctx.stroke()}
-canvas.onpointerup=()=>{drawing=false;ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over'}
-function clearDraw(){ctx.clearRect(0,0,canvas.width,canvas.height)}
-function undoDraw(){let u=history.pop();clearDraw();if(u){let im=new Image();im.onload=()=>ctx.drawImage(im,0,0);im.src=u}}
-
-bindInteractions();
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>التقويم التجميعي</title><link rel="stylesheet" href="new.css"></head><body><header class="hero"><img src="general-header.png"><h1>⑪ التَّقْوِيمُ التَّجْمِيعِيُّ ⭐</h1></header><div class="bar"><a class="fab" href="index.html">🏠 الرئيسية</a><b>⭐ التَّقْوِيمُ</b></div><main class="wrap"><div class="stars" id="stars"></div><section class="card" id="box"></section></main><script src="common.js"></script><script>
+let q=0;const qs=[
+{t:'⭐ الْمَحَطَّةُ ① — أَخْتَارُ',p:'مَا الْمَقْصُودُ بِالتَّجْرِيدِ؟',o:['الِابْتِعَادُ عَنِ النَّقْلِ الْحَرْفِيِّ وَرَفْضُ الْمُحَاكَاةِ مِنْ عَنَاصِرِ الطَّبِيعَةِ.','نَقْلُ الْعُنْصُرِ كَمَا هُوَ تَمَامًا.','اسْتِخْدَامُ الْأَشْكَالِ الْهَنْدَسِيَّةِ فَقَطْ.'],a:0},
+{t:'⭐ الْمَحَطَّةُ ② — أُشَاهِدُ وَأُمَيِّزُ',p:'أَيُّ شَكْلٍ يُمَثِّلُ وَحْدَةً زُخْرُفِيَّةً نَبَاتِيَّةً مُجَرَّدَةً؟',img:'formulations-1-2.png',o:['الشَّكْلُ الطَّبِيعِيُّ','الْوَحْدَةُ الزُّخْرُفِيَّةُ الْمُجَرَّدَةُ','شَكْلٌ هَنْدَسِيٌّ'],a:1},
+{t:'⭐ الْمَحَطَّةُ ③ — أُرَتِّبُ',p:'رَتِّبِي الْخُطُوَاتِ حَتَّى نَصِلَ إِلَى وَحْدَةٍ زُخْرُفِيَّةٍ.',drag:true},
+{t:'⭐ الْمَحَطَّةُ ④ — أَكْتَشِفُ',p:'أَيُّ التَّكْوِينَاتِ يُمَثِّلُ التَّوْرِيقَ فِي الزَّخْرَفَةِ؟ 🌿',img:'tawreeq-choice.png',o:['زَخْرَفَةٌ هَنْدَسِيَّةٌ','تَوْرِيقٌ نَبَاتِيٌّ','زَهْرَةٌ طَبِيعِيَّةٌ'],a:1},
+{t:'⭐ الْمَحَطَّةُ ⑤ — أُكْمِلُ النَّمَطَ',p:'🌿 ◇ 🌿 ◇ 🌿 ❓',o:['◇ مُعَيَّن','🌿 وَحْدَةٌ نَبَاتِيَّةٌ','● دَائِرَة'],a:0},
+{t:'⭐ الْمَحَطَّةُ ⑥ — أُطَبِّقُ',p:'أَيُّ تَكْوِينٍ اسْتَخْدَمَ الْوَحْدَةَ الزُّخْرُفِيَّةَ بِالتَّكْرَارِ؟',img:'repeat-1.png',o:['تَكْوِينٌ بِوَحْدَةٍ وَاحِدَةٍ','تَكْوِينٌ بِتَكْرَارِ الْوَحْدَةِ','رَسْمٌ طَبِيعِيٌّ'],a:1}];
+function render(){stars.innerHTML=starsFn(q);let x=qs[q];if(!x){box.innerHTML='<h1>🏆 أَحْسَنْتِ يَا فَنَّانَةَ الزَّخْرَفَةِ!</h1><p class="lead">أَتْمَمْتِ رِحْلَتَكِ فِي تَجْرِيدِ الْوَحْدَةِ الزُّخْرُفِيَّةِ النَّبَاتِيَّةِ وَالتَّوْرِيقِ فِي الزَّخَارِفِ الْإِسْلَامِيَّةِ. 🌿✨</p><h2>نَتِيجَتُكِ: ٦ / ٦ ⭐</h2>';return}box.innerHTML=`<h2>${x.t}</h2><p class="lead">${x.p}</p>${x.img?`<img class="visual" src="${x.img}">`:''}<div id="area"></div><div class="feedback" id="fb"></div>`;if(x.drag)return dragQ();area.innerHTML='<div class="choices">'+x.o.map((o,i)=>`<button class="choice" onclick="answer(${i})">${o}</button>`).join('')+'</div>'}function starsFn(n){return Array.from({length:6},(_,i)=>`<span class="${i<n?'on':''}">★</span>`).join('')}function answer(i){let x=qs[q];if(i!==x.a)return say('fb','حَاوِلِي مَرَّةً أُخْرَى 🌱',false);say('fb','أَحْسَنْتِ! ⭐',true);q++;stars.innerHTML=starsFn(q);setTimeout(render,900)}
+function dragQ(){const correct=['عُنْصُرٌ نَبَاتِيٌّ','تَبْسِيطٌ','تَحْوِيرٌ','وَحْدَةٌ زُخْرُفِيَّةٌ'];let arr=[...correct].sort(()=>Math.random()-.5),placed=[null,null,null,null],drag=null;area.innerHTML='<div class="dragzone" id="bank"></div><div class="slots" id="slots"></div><p><button class="btn" id="ck">أَتَحَقَّقُ ✨</button></p>';arr.forEach(v=>{let b=document.createElement('div');b.className='drag';b.textContent=v;b.dataset.v=v;b.draggable=true;b.ondragstart=()=>drag=b;b.onpointerdown=e=>{drag=b;b.setPointerCapture(e.pointerId)};b.onpointerup=e=>{let s=document.elementFromPoint(e.clientX,e.clientY)?.closest('.slot');if(s)put(s,b)};bank.appendChild(b)});for(let i=0;i<4;i++){let s=document.createElement('div');s.className='slot';s.dataset.i=i;s.textContent=i+1;s.ondragover=e=>e.preventDefault();s.ondrop=e=>{e.preventDefault();put(s,drag)};slots.appendChild(s)}function put(s,b){let i=+s.dataset.i;if(placed[i])bank.appendChild(placed[i]);placed[i]=b;s.innerHTML='';s.appendChild(b)}ck.onclick=()=>{if(placed.every((b,i)=>b&&b.dataset.v===correct[i])){say('fb','أَحْسَنْتِ! ⭐',true);q++;stars.innerHTML=starsFn(q);setTimeout(render,900)}else say('fb','حَاوِلِي مَرَّةً أُخْرَى 🌱',false)}}render();
 </script></body></html>
